@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Path to Alacritty config
+CONFIG_FILE="$HOME/.config/alacritty/alacritty.toml"
+
+# List of fonts to cycle through
+FONTS=(
+    "JetBrains Mono"
+    "Fira Code"
+    "Cascadia Code"
+)
+
+# Get current font from config
+CURRENT_FONT=$(grep -E '^normal = \{ family = ".*"' "$CONFIG_FILE" | sed 's/.*family = "\([^"]*\)".*/\1/')
+
+# Find current font index
+CURRENT_INDEX=-1
+for i in "${!FONTS[@]}"; do
+    if [[ "${FONTS[$i]}" == "$CURRENT_FONT" ]]; then
+        CURRENT_INDEX=$i
+        break
+    fi
+done
+
+# Calculate next font index
+if [[ $CURRENT_INDEX -eq -1 ]]; then
+    # Current font not in list, start with first font
+    NEXT_INDEX=0
+else
+    # Move to next font, wrap around if at end
+    NEXT_INDEX=$(( (CURRENT_INDEX + 1) % ${#FONTS[@]} ))
+fi
+
+NEXT_FONT="${FONTS[$NEXT_INDEX]}"
+
+# Update the config file
+sed -i '' "s/^normal = { family = \".*\"/normal = { family = \"$NEXT_FONT\"/" "$CONFIG_FILE"
+sed -i '' "s/^bold = { family = \".*\"/bold = { family = \"$NEXT_FONT\"/" "$CONFIG_FILE"
+sed -i '' "s/^italic = { family = \".*\"/italic = { family = \"$NEXT_FONT\"/" "$CONFIG_FILE"
+
+echo "Switched font from '$CURRENT_FONT' to '$NEXT_FONT'"
+echo "Restart Alacritty or create a new window to see the changes"

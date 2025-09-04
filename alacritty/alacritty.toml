@@ -1,0 +1,39 @@
+[window]
+padding = { x = 10, y = 10 }
+decorations = "buttonless"
+opacity = 0.95
+
+[font]
+normal = { family = "Fira Code" }
+bold = { family = "Fira Code" }
+italic = { family = "Fira Code" }
+size = 14.0
+
+[colors]
+# One Dark theme
+primary = { background = "#282c34", foreground = "#abb2bf" }
+cursor = { text = "#282c34", cursor = "#abb2bf" }
+
+normal = { black = "#282c34", red = "#e06c75", green = "#98c379", yellow = "#e5c07b", blue = "#61afef", magenta = "#c678dd", cyan = "#56b6c2", white = "#abb2bf" }
+bright = { black = "#5c6370", red = "#e06c75", green = "#98c379", yellow = "#e5c07b", blue = "#61afef", magenta = "#c678dd", cyan = "#56b6c2", white = "#ffffff" }
+
+[colors.selection]
+text = "#abb2bf"
+background = "#3e4451"
+
+[scrolling]
+history = 10000
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+color = "#ffffff"
+
+[mouse]
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+    { key = "Return", mods = "Command", action = "ToggleSimpleFullscreen" },
+    { key = "F", mods = "Command|Control", action = "ToggleFullscreen" }
+]
