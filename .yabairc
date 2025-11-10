@@ -1,0 +1,103 @@
+#!/usr/bin/env sh
+
+# yabai configuration - Hyprland-inspired tiling WM for macOS
+# https://github.com/koekeishiya/yabai
+
+# ====================
+# Layout Configuration
+# ====================
+
+# Default layout: bsp (binary space partitioning) - like i3/Hyprland
+yabai -m config layout bsp
+
+# Window splitting ratio
+yabai -m config split_ratio 0.50
+
+# Auto balance windows (distribute space evenly)
+yabai -m config auto_balance on
+
+# ====================
+# Window Appearance
+# ====================
+
+# Window borders (requires SIP disabled for full features)
+# yabai -m config window_border on
+# yabai -m config window_border_width 4
+# yabai -m config active_window_border_color 0xff81a1c1
+# yabai -m config normal_window_border_color 0xff3b4252
+
+# Window gaps
+yabai -m config top_padding    12
+yabai -m config bottom_padding 12
+yabai -m config left_padding   12
+yabai -m config right_padding  12
+yabai -m config window_gap     12
+
+# ====================
+# Mouse Behavior
+# ====================
+
+# Focus follows mouse
+yabai -m config focus_follows_mouse off
+
+# Mouse follows focus
+yabai -m config mouse_follows_focus off
+
+# Modifier for moving/resizing windows with mouse
+yabai -m config mouse_modifier cmd
+
+# Left click + drag to move window
+yabai -m config mouse_action1 move
+
+# Right click + drag to resize window
+yabai -m config mouse_action2 resize
+
+# When window is dropped in center of another, swap positions
+yabai -m config mouse_drop_action swap
+
+# ====================
+# Window Placement
+# ====================
+
+# New window spawns to the right if vertical split, or bottom if horizontal
+yabai -m config window_placement second_child
+
+# Window opacity (requires SIP disabled)
+# yabai -m config window_opacity on
+# yabai -m config active_window_opacity 1.0
+# yabai -m config normal_window_opacity 0.95
+
+# Window shadows
+yabai -m config window_shadow float
+
+# ====================
+# Application Rules
+# ====================
+
+# Don't manage certain apps
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^Calculator$" manage=off
+yabai -m rule --add app="^Karabiner-Elements$" manage=off
+yabai -m rule --add app="^Karabiner-EventViewer$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^Archive Utility$" manage=off
+yabai -m rule --add app="^Alfred$" manage=off
+yabai -m rule --add app="^Raycast$" manage=off
+yabai -m rule --add app="^Activity Monitor$" manage=off
+yabai -m rule --add app="^App Store$" manage=off
+yabai -m rule --add app="^1Password$" manage=off
+
+# Float specific windows
+yabai -m rule --add title="^Preferences$" manage=off
+yabai -m rule --add title="^Settings$" manage=off
+
+# ====================
+# Signals (Event Hooks)
+# ====================
+
+# Refresh yabai when display changes
+yabai -m signal --add event=display_added action="yabai -m config layout bsp"
+yabai -m signal --add event=display_removed action="yabai -m config layout bsp"
+
+echo "yabai configuration loaded.."

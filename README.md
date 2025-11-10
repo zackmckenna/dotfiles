@@ -25,6 +25,18 @@ Modern, lightweight macOS development environment with beautiful UI and icons.
 - **fzf**: Fuzzy finder for files and history
 - **ripgrep**: Faster grep alternative
 
+### Window Management (Hyprland-inspired!)
+- **yabai**: Tiling window manager with BSP/Stack/Float layouts
+- **skhd**: Hotkey daemon with vim-style keybindings (`Cmd+Alt+H/J/K/L`)
+- **Rectangle**: Simple window snapping (fallback/backup)
+
+### Productivity Utilities
+- **Raycast**: Spotlight on steroids (clipboard, snippets, extensions)
+- **Maccy**: Lightweight clipboard manager
+- **Stats**: Beautiful menu bar system monitor
+- **AltTab**: Windows-style Alt+Tab with window previews
+- **Hidden Bar**: Clean up menu bar by hiding icons
+
 ### Configuration
 - **Karabiner-Elements**: Dual-function Caps Lock (tap=Esc, hold=Ctrl)
 - **Git**: GitHub best practices with delta integration
@@ -195,3 +207,111 @@ open -a WezTerm
 ```
 
 All your configurations will be loaded automatically!
+
+## Window Management with yabai + skhd
+
+Hyprland-inspired tiling window manager for macOS!
+
+### Quick Start
+
+1. **Start yabai and skhd**:
+   ```bash
+   yabai --start-service
+   skhd --start-service
+   ```
+
+2. **Create workspaces**: 
+   - Swipe up with 3-4 fingers
+   - Click "+" at top right to create new spaces (workspaces)
+   - Recommended: Create 4-6 spaces for different contexts
+
+3. **Basic Usage**:
+   - `Cmd + Alt + H/J/K/L` - Focus window (vim-style)
+   - `Cmd + Alt + Shift + H/J/K/L` - Move window
+   - `Cmd + Alt + F` - Toggle float
+   - `Cmd + Alt + M` - Toggle fullscreen
+   - `Cmd + Alt + 1-9` - Switch to workspace 1-9
+
+### Full Keybindings
+
+See [YABAI_SHORTCUTS.md](YABAI_SHORTCUTS.md) for complete keyboard shortcut reference.
+
+### Layout Modes
+
+- **BSP (Default)**: Binary space partitioning - windows tile automatically
+- **Stack**: All windows stacked, only one visible (like tabs)
+- **Float**: Windows float freely (no tiling)
+
+Toggle between modes: `Cmd + Alt + T` (BSP ↔ Stack) or `Cmd + Alt + Space` (BSP ↔ Float)
+
+### Important Notes
+
+**SIP (System Integrity Protection):**
+- Yabai works great with SIP enabled (current config)
+- For advanced features (window borders, opacity), SIP must be partially disabled
+- Current setup prioritizes security - all core features work without SIP changes
+
+**Permissions:**
+- After first start, grant yabai Accessibility permissions
+- System Settings → Privacy & Security → Accessibility → Enable yabai
+
+**Troubleshooting:**
+```bash
+# View logs
+tail -f /tmp/yabai_$USER.out.log
+tail -f /tmp/skhd_$USER.out.log
+
+# Restart services
+yabai --restart-service
+skhd --restart-service
+
+# Stop services
+yabai --stop-service
+skhd --stop-service
+```
+
+### Rectangle (Backup)
+
+If yabai feels too complex, **Rectangle** provides simple window snapping:
+- Launch from Applications
+- `Ctrl + Alt + Arrow Keys` for basic snapping
+- Access from menu bar for configuration
+
+You can use both! Rectangle for quick snaps, yabai for full tiling workflow.
+
+## Essential Utilities Setup
+
+### Raycast
+
+Replaces Spotlight with superpowers:
+1. Launch Raycast
+2. Set hotkey (recommended: `Cmd + Space`)
+3. Import extensions: Clipboard History, Window Management, GitHub, etc.
+
+### Stats
+
+System monitor in menu bar:
+1. Launch Stats
+2. Configure which stats to show (CPU, Memory, Network)
+3. Customize appearance
+
+### Maccy
+
+Clipboard manager:
+1. Launch Maccy
+2. Set hotkey (recommended: `Cmd + Shift + V`)
+3. Access clipboard history anytime
+
+### AltTab
+
+Windows-style window switcher:
+1. Launch AltTab
+2. Use `Alt + Tab` to see window previews
+3. Much better than macOS default!
+
+### Hidden Bar
+
+Clean up menu bar:
+1. Launch Hidden Bar
+2. Drag icons you want to hide to the Hidden Bar section
+3. Click arrow to show/hide hidden icons
