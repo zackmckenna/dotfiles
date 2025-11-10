@@ -32,8 +32,11 @@ alias tl="tmux list-sessions"
 # Common shortcuts
 alias vim="nvim"
 alias vi="nvim"
-alias ls="ls -G"
-alias ll="ls -lah"
+alias ls="eza --icons=always"
+alias ll="eza -lah --icons=always"
+alias la="eza -la --icons=always"
+alias lt="eza --tree --level=2 --icons=always"
+alias cat="bat"
 alias ..="cd .."
 alias ...="cd ../.."
 
@@ -43,6 +46,10 @@ alias dc="docker-compose"
 alias dps="docker ps"
 alias dimg="docker images"
 alias dprune="docker system prune -af --volumes"
+alias lzd="lazydocker"
+
+# Lazygit
+alias lg="lazygit"
 
 # GitHub CLI
 alias pr="gh pr"
@@ -59,11 +66,19 @@ setopt HIST_FIND_NO_DUPS
 # Enable colors
 autoload -U colors && colors
 
-# Simple prompt (lightweight)
-PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$ '
-
 # Auto-complete
 autoload -Uz compinit && compinit
 
 # Case-insensitive completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# Zoxide (smarter cd)
+eval "$(zoxide init zsh)"
+alias cd="z"
+
+# Starship prompt (beautiful and fast)
+eval "$(starship init zsh)"
+
+# Zsh plugins (load last)
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
