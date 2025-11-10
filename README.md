@@ -1,12 +1,32 @@
 # Dotfiles
 
-Lightweight macOS development environment configuration.
+Modern, lightweight macOS development environment with beautiful UI and icons.
 
 ## What's Included
 
-- **tmux**: Terminal multiplexer with Caps Lock as prefix key
+### Terminal & Shell
+- **WezTerm**: GPU-accelerated terminal emulator
+- **Starship**: Beautiful, fast prompt with icons
+- **Nerd Fonts**: JetBrains Mono with full icon support
+- **zsh**: Enhanced with autosuggestions and syntax highlighting
+
+### Development Tools
+- **tmux**: Terminal multiplexer with Caps Lock as prefix
 - **Neovim**: LazyVim configuration for modern editing
-- **Git**: GitHub best practices configuration
+- **lazygit**: Terminal UI for git operations
+- **lazydocker**: Terminal UI for Docker management
+
+### Modern CLI Tools
+- **eza**: Modern `ls` replacement with icons
+- **bat**: Syntax-highlighted `cat` replacement
+- **zoxide**: Smarter `cd` command (learns your habits)
+- **git-delta**: Beautiful git diffs with syntax highlighting
+- **btop**: System resource monitor
+- **fzf**: Fuzzy finder for files and history
+- **ripgrep**: Faster grep alternative
+
+### Configuration
+- **Git**: GitHub best practices with delta integration
 - **Docker**: Low memory usage settings
 
 ## Installation
@@ -26,10 +46,23 @@ cp -r ~/dotfiles/nvim ~/.config/nvim
 
 ## Prerequisites
 
-Install required packages via Homebrew:
+Install all required packages via Homebrew:
 
 ```bash
-brew install tmux neovim ripgrep fd fzf gh
+# Terminal emulator and fonts
+brew install --cask wezterm
+brew install font-jetbrains-mono-nerd-font font-meslo-lg-nerd-font
+
+# Core development tools
+brew install tmux neovim gh git-delta
+
+# Modern CLI tools
+brew install lazygit lazydocker bat eza zoxide btop starship fzf ripgrep fd
+
+# Shell enhancements
+brew install zsh-autosuggestions zsh-syntax-highlighting
+
+# Docker
 brew install --cask docker
 ```
 
@@ -75,3 +108,63 @@ After installing Docker Desktop, configure resource limits:
 3. Set Caps Lock to Control
 
 This makes `Ctrl+A` (tmux prefix) much more ergonomic.
+
+## Quick Reference
+
+### Modern CLI Aliases
+
+```bash
+# File navigation (with icons!)
+ls              # Lists files with icons (eza)
+ll              # Detailed list with icons
+la              # All files including hidden
+lt              # Tree view (2 levels deep)
+
+# File viewing
+cat file.txt    # Syntax-highlighted (bat)
+
+# Smart navigation
+cd project      # Jump to frequently used dirs (zoxide)
+
+# Git
+lg              # Open lazygit TUI
+gs              # Git status
+gd              # Git diff (with delta)
+
+# Docker
+lzd             # Open lazydocker TUI
+dps             # Docker ps
+dprune          # Clean up Docker resources
+
+# System monitoring
+btop            # Beautiful system monitor
+
+# Tmux
+t               # Start tmux
+ta              # Attach to session
+tn name         # New session with name
+```
+
+### Key Features
+
+- **Auto-suggestions**: Start typing a command you've used before, it will suggest completion (gray text, press →)
+- **Syntax highlighting**: Commands turn green if valid, red if not found
+- **Smart cd**: `cd` remembers your most-used directories - just type part of the name
+- **Beautiful git diffs**: Run `git diff` or `git log -p` to see syntax-highlighted diffs
+- **Icons everywhere**: File icons in ls, git icons in prompt, language icons in starship
+
+### WezTerm Shortcuts
+
+- `Cmd+|`: Split pane horizontally
+- `Cmd+_`: Split pane vertically
+- `Cmd+h/j/k/l`: Navigate between panes (vim-style)
+- `Cmd+w`: Close current pane
+
+### Launch WezTerm
+
+After setup, open WezTerm from Applications or run:
+```bash
+open -a WezTerm
+```
+
+All your configurations will be loaded automatically!
