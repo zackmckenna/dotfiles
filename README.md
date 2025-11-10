@@ -26,6 +26,7 @@ Modern, lightweight macOS development environment with beautiful UI and icons.
 - **ripgrep**: Faster grep alternative
 
 ### Configuration
+- **Karabiner-Elements**: Dual-function Caps Lock (tap=Esc, hold=Ctrl)
 - **Git**: GitHub best practices with delta integration
 - **Docker**: Low memory usage settings
 
@@ -101,13 +102,39 @@ After installing Docker Desktop, configure resource limits:
 
 ## System Setup
 
-### Remap Caps Lock to Control
+### Dual-Function Caps Lock (Best of Both Worlds!)
 
-1. Open System Settings
-2. Go to Keyboard → Keyboard Shortcuts → Modifier Keys
-3. Set Caps Lock to Control
+Using **Karabiner-Elements**, Caps Lock is configured as:
+- **Tap** Caps Lock alone → **Escape** (perfect for vim!)
+- **Hold** Caps Lock + key → **Control** (perfect for tmux!)
 
-This makes `Ctrl+A` (tmux prefix) much more ergonomic.
+This is the ultimate vim/tmux setup - no compromises!
+
+#### Setup Karabiner-Elements
+
+1. **Install** (requires admin password):
+   ```bash
+   brew install --cask karabiner-elements
+   ```
+
+2. **Grant permissions**:
+   - Open System Settings → Privacy & Security
+   - Allow Karabiner-Elements and karabiner_grabber
+
+3. **Activate** (if using install.sh, this is automatic):
+   - Open Karabiner-Elements
+   - The dual-function Caps Lock rule should already be active
+   - If not, go to Complex Modifications → Add rule → Enable "Caps Lock: Tap for Escape, Hold for Control"
+
+4. **Test it**:
+   - Tap Caps Lock → Should work as Escape (try in vim: `i` to insert, Caps Lock to exit)
+   - Hold Caps Lock + A → Should work as Ctrl+A (tmux prefix)
+
+**Why this is amazing:**
+- `i` to enter insert mode, quick tap Caps Lock to exit (faster than reaching for Esc!)
+- `Caps Lock + a` then `|` to split tmux pane
+- `Caps Lock + c` to send interrupt signal
+- All without moving your hands from home row!
 
 ## Quick Reference
 
