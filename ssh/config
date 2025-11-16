@@ -13,6 +13,12 @@ Host pi-local
     User pi
     IdentityFile ~/.ssh/id_ed25519
 
+# Linode Server - Tailscale
+Host linode
+    HostName 100.88.160.126
+    User root
+    IdentityFile ~/.ssh/id_ed25519
+
 # Common settings for all hosts
 Host *
     ServerAliveInterval 60
