@@ -1,0 +1,20 @@
+# SSH Configuration
+# Usage: ssh <alias>
+
+# Raspberry Pi - Tailscale (works anywhere)
+Host pi
+    HostName 100.116.74.35
+    User pi
+    IdentityFile ~/.ssh/id_ed25519
+
+# Raspberry Pi - Local network (faster when on home WiFi)
+Host pi-local
+    HostName 192.168.1.50
+    User pi
+    IdentityFile ~/.ssh/id_ed25519
+
+# Common settings for all hosts
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    IdentitiesOnly yes
