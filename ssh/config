@@ -19,6 +19,12 @@ Host linode
     User root
     IdentityFile ~/.ssh/id_ed25519
 
+# Mac (self) - for SSH from iPhone/other devices
+Host mac
+    HostName 100.103.116.46
+    User zacharymckenna
+    IdentityFile ~/.ssh/id_ed25519
+
 # Common settings for all hosts
 Host *
     ServerAliveInterval 60
