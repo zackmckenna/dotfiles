@@ -79,6 +79,34 @@ alias cd="z"
 # Starship prompt (beautiful and fast)
 eval "$(starship init zsh)"
 
+# direnv hook (load environment variables from .envrc)
+eval "$(direnv hook zsh)"
+
+# thefuck alias (correct previous command)
+eval $(thefuck --alias)
+
+# Node.js / npm
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# Useful aliases for new tools
+alias http="httpie"
+alias preview="glow"
+alias help="tldr"
+alias top="htop"
+
+# jq aliases for common operations
+alias jqp="jq -C . | less -R"  # Pretty print and page JSON
+
+# ni package manager wrapper (@antfu/ni)
+# Automatically uses the right package manager (npm/yarn/pnpm)
+
 # Zsh plugins (load last)
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# PARA shortcuts
+alias para='open ~/Documents/PARA'
+alias servers='code ~/Documents/PARA/Areas/Infrastructure/Servers.md'
+
+# uv tools
+export PATH="$HOME/.local/bin:$PATH"
