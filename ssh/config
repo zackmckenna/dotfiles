@@ -25,6 +25,12 @@ Host mac
     User zacharymckenna
     IdentityFile ~/.ssh/id_ed25519
 
+# Windows Desktop - Tailscale
+Host windows
+    HostName 100.126.25.94
+    User zack
+    IdentityFile ~/.ssh/id_ed25519
+
 # Common settings for all hosts
 Host *
     ServerAliveInterval 60
