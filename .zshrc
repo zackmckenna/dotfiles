@@ -110,3 +110,10 @@ alias servers='code ~/Documents/PARA/Areas/Infrastructure/Servers.md'
 
 # uv tools
 export PATH="$HOME/.local/bin:$PATH"
+
+# Server documentation update
+alias update-servers='~/Documents/PARA/update-servers-info.sh'
+alias check-servers='~/dotfiles/shell/check-servers.sh'
+
+# Guacamole quick access
+alias guac='open http://100.88.160.126:8080'
