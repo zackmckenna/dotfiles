@@ -50,3 +50,7 @@ venv/
 # Rust
 target/
 Cargo.lock
+
+# Beads stealth mode: /Users/zackmckenna/Developer/work/runpod (added by bd init --stealth)
+/Users/zackmckenna/Developer/work/runpod/.beads/
+/Users/zackmckenna/Developer/work/runpod/.claude/settings.local.json

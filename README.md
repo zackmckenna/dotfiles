@@ -16,7 +16,7 @@ My personal configuration files for macOS.
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/YOUR_GITHUB_USERNAME/dotfiles.git ~/dotfiles
 
 # Run the install script
 cd ~/dotfiles
@@ -77,6 +77,20 @@ git pull
 1. Copy the config file to the appropriate directory in `~/dotfiles`
 2. Update `install.sh` to create the symlink
 3. Commit and push changes
+
+## Secrets & Environment Variables
+
+- Private values should live in `~/.zsh_secrets` (or `zsh/secrets.zsh`, which is ignored).
+- Use `zsh/secrets.zsh.sample` as a template; copy it, then set any exports you need.
+- If you're on macOS, consider storing values in the Keychain:
+
+  ```bash
+  security add-generic-password -a "$USER" -s runpod-db-dev -w 'mysql://...'
+  security add-generic-password -a "$USER" -s runpod-db-prod -w 'mysql://...'
+  ```
+
+  The helper functions in `.zshrc` will read the secrets automatically when
+  `DB_DEV` / `DB_PROD` are not already defined.
 
 ## Backup
 

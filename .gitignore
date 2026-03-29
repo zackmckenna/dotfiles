@@ -1,0 +1,3 @@
+# Private configuration that must never be committed
+zsh/secrets.zsh
+zsh/secrets.zsh.local
