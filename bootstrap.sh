@@ -71,18 +71,12 @@ elif [[ "$OS" == "Linux" ]]; then
     sudo apt-get update -qq && sudo apt-get install -y gh
   fi
 
-  # 1Password CLI (direct binary download — most reliable across distros)
-  if ! command -v op &>/dev/null; then
-    info "Installing 1Password CLI..."
-    {
-      OP_VERSION=$(curl -s "https://app-updates.agilebits.com/product_history/CLI2" | grep -oP '(?<=<b>)[0-9]+\.[0-9]+\.[0-9]+(?=</b>)' | head -1)
-      [ -z "$OP_VERSION" ] && OP_VERSION="2.32.0"
-      curl -fsSL "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_linux_amd64_v${OP_VERSION}.zip" -o /tmp/op.zip \
-        && unzip -q /tmp/op.zip -d /tmp/op \
-        && sudo mv /tmp/op/op /usr/local/bin/op \
-        && rm -rf /tmp/op /tmp/op.zip \
-        && log "1Password CLI installed"
-    } || warn "1Password CLI install failed — skipping"
+  # 1Password CLI — optional, install manually if needed
+  # https://developer.1password.com/docs/cli/get-started/
+  if command -v op &>/dev/null; then
+    log "1Password CLI already installed"
+  else
+    warn "1Password CLI not installed — secrets via age only (install op manually if needed)"
   fi
 
   # age encryption
