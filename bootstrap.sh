@@ -4,7 +4,8 @@
 # Usage: curl -fsSL https://raw.githubusercontent.com/zackmckenna/dotfiles/main/bootstrap.sh | bash
 # Or:    bash bootstrap.sh [--work] (--work also clones work dotfiles if OP_SERVICE_ACCOUNT_TOKEN is set)
 
-set -e
+set -eo pipefail
+# Individual steps use || true or warn() to handle failures gracefully
 DOTFILES_REPO="git@github-personal:zackmckenna/dotfiles.git"
 DOTFILES_HTTPS="https://github.com/zackmckenna/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
@@ -71,13 +72,24 @@ elif [[ "$OS" == "Linux" ]]; then
     sudo apt-get update -qq && sudo apt-get install -y gh
   fi
 
-  # 1Password CLI
+  # 1Password CLI (via official apt repo)
   if ! command -v op &>/dev/null; then
     info "Installing 1Password CLI..."
-    OP_VERSION=$(curl -s https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N -o /dev/null -w '%{redirect_url}' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-    curl -fsSL "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_linux_amd64_v${OP_VERSION}.zip" -o /tmp/op.zip
-    unzip -q /tmp/op.zip -d /tmp/op && sudo mv /tmp/op/op /usr/local/bin/op
-    rm -rf /tmp/op /tmp/op.zip
+    curl -sS https://downloads.1password.com/linux/keys/1password.asc \
+      | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg 2>/dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" \
+      | sudo tee /etc/apt/sources.list.d/1password.list >/dev/null
+    sudo apt-get update -qq && sudo apt-get install -y 1password-cli 2>/dev/null || \
+      warn "1Password CLI install failed — install manually: https://developer.1password.com/docs/cli/get-started"
+  fi
+
+  # age encryption
+  if ! command -v age &>/dev/null; then
+    info "Installing age..."
+    AGE_VERSION=$(curl -s https://api.github.com/repos/FiloSottile/age/releases/latest | grep tag_name | cut -d'"' -f4)
+    curl -fsSL "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-linux-amd64.tar.gz" \
+      | tar xz -C /tmp && sudo mv /tmp/age/age /usr/local/bin/age && sudo mv /tmp/age/age-keygen /usr/local/bin/age-keygen
+    rm -rf /tmp/age
   fi
 fi
 
