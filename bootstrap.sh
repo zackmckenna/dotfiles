@@ -4,8 +4,7 @@
 # Usage: curl -fsSL https://raw.githubusercontent.com/zackmckenna/dotfiles/main/bootstrap.sh | bash
 # Or:    bash bootstrap.sh [--work] (--work also clones work dotfiles if OP_SERVICE_ACCOUNT_TOKEN is set)
 
-set -eo pipefail
-# Individual steps use || true or warn() to handle failures gracefully
+set -e
 DOTFILES_REPO="git@github-personal:zackmckenna/dotfiles.git"
 DOTFILES_HTTPS="https://github.com/zackmckenna/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
@@ -72,15 +71,18 @@ elif [[ "$OS" == "Linux" ]]; then
     sudo apt-get update -qq && sudo apt-get install -y gh
   fi
 
-  # 1Password CLI (via official apt repo)
+  # 1Password CLI (direct binary download — most reliable across distros)
   if ! command -v op &>/dev/null; then
     info "Installing 1Password CLI..."
-    curl -sS https://downloads.1password.com/linux/keys/1password.asc \
-      | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg 2>/dev/null
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" \
-      | sudo tee /etc/apt/sources.list.d/1password.list >/dev/null
-    sudo apt-get update -qq && sudo apt-get install -y 1password-cli 2>/dev/null || \
-      warn "1Password CLI install failed — install manually: https://developer.1password.com/docs/cli/get-started"
+    {
+      OP_VERSION=$(curl -s "https://app-updates.agilebits.com/product_history/CLI2" | grep -oP '(?<=<b>)[0-9]+\.[0-9]+\.[0-9]+(?=</b>)' | head -1)
+      [ -z "$OP_VERSION" ] && OP_VERSION="2.32.0"
+      curl -fsSL "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_linux_amd64_v${OP_VERSION}.zip" -o /tmp/op.zip \
+        && unzip -q /tmp/op.zip -d /tmp/op \
+        && sudo mv /tmp/op/op /usr/local/bin/op \
+        && rm -rf /tmp/op /tmp/op.zip \
+        && log "1Password CLI installed"
+    } || warn "1Password CLI install failed — skipping"
   fi
 
   # age encryption
