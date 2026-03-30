@@ -8,7 +8,7 @@ set -e
 DOTFILES_REPO="git@github-personal:zackmckenna/dotfiles.git"
 DOTFILES_HTTPS="https://github.com/zackmckenna/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
-WORK_DOTFILES_REPO="git@github.com:YOUR_ORG/dotfiles-work.git"
+WORK_DOTFILES_REPO="git@github.com:zackmckennarunpod/dotfiles-work.git"
 WORK_DOTFILES_DIR="$HOME/dotfiles-work"
 AGE_KEY="${AGE_KEY_FILE:-$HOME/.ssh/id_ed25519_personal}"
 WITH_WORK=false
