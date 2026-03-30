@@ -8,8 +8,9 @@ set -e
 DOTFILES_REPO="git@github-personal:zackmckenna/dotfiles.git"
 DOTFILES_HTTPS="https://github.com/zackmckenna/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
-WORK_DOTFILES_REPO="https://github.com/zackmckennarunpod/dotfiles-work.git"
-WORK_DOTFILES_DIR="$HOME/.dotfiles-work"
+WORK_DOTFILES_REPO="git@github.com:zackmckennarunpod/dotfiles-work.git"
+WORK_DOTFILES_DIR="$HOME/dotfiles-work"
+AGE_KEY="${AGE_KEY_FILE:-$HOME/.ssh/id_ed25519_personal}"
 WITH_WORK=false
 [[ "$*" == *"--work"* ]] && WITH_WORK=true
 
@@ -111,24 +112,38 @@ fi
 info "Linking config files..."
 bash "$DOTFILES_DIR/install.sh"
 
-# ── 5. 1Password + work dotfiles ─────────────────────────────────────────────
-if [ -n "$OP_SERVICE_ACCOUNT_TOKEN" ] || [ "$WITH_WORK" = true ]; then
-  info "Setting up 1Password CLI..."
-  export OP_SERVICE_ACCOUNT_TOKEN="${OP_SERVICE_ACCOUNT_TOKEN:-}"
+# ── 5. Work dotfiles (age-encrypted secrets) ─────────────────────────────────
+# Requires: SSH agent forwarding (ssh -A) or id_ed25519_personal present
+if [ "$WITH_WORK" = true ] || [ -n "$SSH_AUTH_SOCK" ]; then
+  info "Setting up work dotfiles..."
 
-  if command -v op &>/dev/null && [ -n "$OP_SERVICE_ACCOUNT_TOKEN" ]; then
-    log "1Password service account configured"
-
-    # Clone work dotfiles (contains ~/.zsh_runpod)
-    if [ ! -d "$WORK_DOTFILES_DIR/.git" ]; then
-      info "Cloning work dotfiles..."
-      git clone "$WORK_DOTFILES_REPO" "$WORK_DOTFILES_DIR" 2>/dev/null && \
-        ln -sf "$WORK_DOTFILES_DIR/zsh_runpod" "$HOME/.zsh_runpod" && \
-        log "Work dotfiles linked"
-    fi
+  # Clone work dotfiles repo
+  if [ ! -d "$WORK_DOTFILES_DIR/.git" ]; then
+    info "Cloning work dotfiles..."
+    git clone "$WORK_DOTFILES_REPO" "$WORK_DOTFILES_DIR" 2>/dev/null || {
+      warn "Could not clone work dotfiles (SSH key not available?)"
+      warn "To set up later: ssh -A into this machine and run: bash ~/dotfiles/bootstrap.sh --work"
+    }
   else
-    warn "OP_SERVICE_ACCOUNT_TOKEN not set — skipping work dotfiles"
-    warn "To add later: export OP_SERVICE_ACCOUNT_TOKEN=<token> && bash ~/.dotfiles/bootstrap.sh --work"
+    git -C "$WORK_DOTFILES_DIR" pull --rebase 2>/dev/null || true
+  fi
+
+  # Decrypt secrets if work dotfiles cloned and age key available
+  if [ -d "$WORK_DOTFILES_DIR/.git" ] && command -v age &>/dev/null; then
+    ENCRYPTED="$WORK_DOTFILES_DIR/zsh_runpod.age"
+    if [ -f "$ENCRYPTED" ]; then
+      # Try SSH agent first (key never touches this machine), then key file
+      if ssh-add -l &>/dev/null 2>&1; then
+        age -d -i <(ssh-add -L | head -1 | awk '{print $2}' | base64 -d 2>/dev/null) "$ENCRYPTED" > ~/.zsh_runpod 2>/dev/null || \
+        age -d -i "$AGE_KEY" "$ENCRYPTED" > ~/.zsh_runpod 2>/dev/null || \
+        warn "Could not decrypt secrets — run manually: age -d -i ~/.ssh/id_ed25519_personal $ENCRYPTED > ~/.zsh_runpod"
+      elif [ -f "$AGE_KEY" ]; then
+        age -d -i "$AGE_KEY" "$ENCRYPTED" > ~/.zsh_runpod && log "Secrets decrypted"
+      else
+        warn "No SSH key available for decryption. SSH in with: ssh -A root@<pod>"
+      fi
+      [ -f ~/.zsh_runpod ] && log "Work secrets ready (~/.zsh_runpod)"
+    fi
   fi
 fi
 
