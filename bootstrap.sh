@@ -37,7 +37,7 @@ elif [[ "$OS" == "Linux" ]]; then
   apt-get update -qq 2>/dev/null || sudo apt-get update -qq
   APT="apt-get install -y -qq"
   command -v sudo &>/dev/null && APT="sudo apt-get install -y -qq"
-  $APT git tmux curl wget unzip build-essential
+  $APT git tmux curl wget unzip build-essential zsh
 
   # bun
   if ! command -v bun &>/dev/null; then
@@ -122,7 +122,7 @@ bash "$DOTFILES_DIR/install.sh"
 
 # ── 5. Work dotfiles (age-encrypted secrets) ─────────────────────────────────
 # Requires: SSH agent forwarding (ssh -A) or id_ed25519_personal present
-if [ "$WITH_WORK" = true ] || [ -n "$SSH_AUTH_SOCK" ]; then
+if [ "$WITH_WORK" = true ]; then
   info "Setting up work dotfiles..."
 
   # Clone work dotfiles repo
