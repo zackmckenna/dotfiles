@@ -197,6 +197,21 @@ command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
     source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# ============ RunPod Utilities ============
+rpod() {
+  local name="${1:-zack-dev-test}"
+  local key=$(security find-generic-password -s runpod-api-key-dev -w)
+  local pod=$(curl -s -X POST "https://api.runpod.dev/graphql" \
+    -H "Authorization: Bearer $key" \
+    -H "Content-Type: application/json" \
+    -d "{\"query\": \"{ myself { pods { id name runtime { ports { ip privatePort publicPort type } } } } }\"}" \
+    | jq -r ".data.myself.pods[] | select(.name | test(\"$name\"; \"i\")) | .runtime.ports[] | select(.type==\"tcp\") | \"\(.ip):\(.publicPort)\"" | head -1)
+  local ip="${pod%%:*}"
+  local port="${pod##*:}"
+  echo "→ Connecting to $name ($ip:$port)"
+  ssh -A root@"$ip" -p "$port"
+}
+
 # ============ Local / Work Overrides ============
 # Source work-specific or machine-specific config (never committed to dotfiles)
 for _f in "$HOME/.zsh_runpod" "$HOME/.zsh_local" "$HOME/.zsh_secrets"; do
