@@ -85,8 +85,8 @@ git pull
 - If you're on macOS, consider storing values in the Keychain:
 
   ```bash
-  security add-generic-password -a "$USER" -s runpod-db-dev -w 'mysql://...'
-  security add-generic-password -a "$USER" -s runpod-db-prod -w 'mysql://...'
+  security add-generic-password -a "$USER" -s my-db-dev -w 'mysql://...'
+  security add-generic-password -a "$USER" -s my-db-prod -w 'mysql://...'
   ```
 
   The helper functions in `.zshrc` will read the secrets automatically when
