@@ -140,16 +140,8 @@ if [ "$WITH_WORK" = true ]; then
   if [ -d "$WORK_DOTFILES_DIR/.git" ] && command -v age &>/dev/null; then
     ENCRYPTED="$WORK_DOTFILES_DIR/work_secrets.age"
     if [ -f "$ENCRYPTED" ]; then
-      # Try SSH agent first (key never touches this machine), then key file
-      if ssh-add -l &>/dev/null 2>&1; then
-        age -d -i <(ssh-add -L | head -1 | awk '{print $2}' | base64 -d 2>/dev/null) "$ENCRYPTED" > ~/.work_secrets 2>/dev/null || \
-        age -d -i "$AGE_KEY" "$ENCRYPTED" > ~/.work_secrets 2>/dev/null || \
-        warn "Could not decrypt secrets — run manually: age -d -i ~/.ssh/id_ed25519_personal $ENCRYPTED > ~/.work_secrets"
-      elif [ -f "$AGE_KEY" ]; then
-        age -d -i "$AGE_KEY" "$ENCRYPTED" > ~/.work_secrets && log "Secrets decrypted"
-      else
-        warn "No SSH key available for decryption. SSH in with: ssh -A root@<pod>"
-      fi
+      age -d "$ENCRYPTED" > ~/.work_secrets && log "Secrets decrypted" || \
+        warn "Could not decrypt secrets — run manually: age -d $ENCRYPTED > ~/.work_secrets"
       [ -f ~/.work_secrets ] && log "Work secrets ready (~/.work_secrets)"
     fi
   fi
